@@ -17,34 +17,50 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/',async function (req, res) {
-  return await new Promise(resolve => res.status(200).send(JSON.stringify(books)))
-});
+public_users.get('/', async function (req, res) {
+    try {
+      const response = await axios.get('http://localhost:5000/books');
+      res.status(200).send(JSON.stringify(response.data));
+    } catch (err) {
+      res.status(500).send(JSON.stringify(err.message));
+    }
+  });
 
 // Get book details based on ISBN
-public_users.get('/isbn/:isbn',async function (req, res) {
-    return await new Promise(resolve => res.status(200).send(JSON.stringify(books[req.params.isbn])))
- });
+public_users.get('/isbn/:isbn', async function (req, res) {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/books/isbn/${req.params.isbn}`
+      );
+      res.status(200).send(JSON.stringify(response.data));
+    } catch (err) {
+      res.status(500).send(JSON.stringify(err.message));
+    }
+  });
   
 // Get book details based on author
-public_users.get('/author/:author',async function (req, res) {
-    const keys = Object.keys(books);
-    let authors = {};
-    for(key in books){
-        if(books[key].author === req.params.author) authors[key] = books[key];
+public_users.get('/author/:author', async function (req, res) {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/books/author/${req.params.author}`
+      );
+      res.status(200).send(JSON.stringify(response.data));
+    } catch (err) {
+      res.status(500).send(JSON.stringify(err.message));
     }
-  return await new Promise(resolve => res.status(200).send(JSON.stringify(authors)))
-});
+  });
 
 // Get all books based on title
-public_users.get('/title/:title',async function (req, res) {
-    const keys = Object.keys(books);
-    let titles = {};
-    for(key in books){
-        if(books[key].title === req.params.title) titles[key] = books[key];
+public_users.get('/title/:title', async function (req, res) {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/books/title/${req.params.title}`
+      );
+      res.status(200).send(JSON.stringify(response.data));
+    } catch (err) {
+      res.status(500).send(JSON.stringify(err.message));
     }
-  return await new Promise(resolve => res.status(200).send(JSON.stringify(titles)))
-});
+  });
 
 //  Get book review
 public_users.get('/review/:isbn',async function (req, res) {
